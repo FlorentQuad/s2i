@@ -1,8 +1,9 @@
-FROM alpine
-RUN echo "#!/bin/bash
-while true
-do
-  echo "Hello From Docker file: " + $(date)
-done" > loop.sh
-RUN chmod +x loop.sh
-ENTRYPOINT [ "/loop.sh" ]
+FROM fedora
+RUN echo $'#!/bin/bash\n\ 
+while true\n\
+do\n\ 
+	echo "Hello From Docker file: "$(date)\n\ 
+	sleep 1\n\
+done\n\ ' > loop.sh
+RUN chmod +x /loop.sh
+CMD [ "/loop.sh" ]

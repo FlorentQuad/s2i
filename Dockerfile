@@ -1,4 +1,4 @@
-FROM fedora
+FROM registry.access.redhat.com/ubi8/ubi-micro
 RUN echo $'#!/bin/bash\n\ 
 while true\n\
 do\n\ 

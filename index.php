@@ -10,6 +10,9 @@
             justify-content: center;
             min-height: 100vh;
             min-height: 100dvh;
+            margin: 0;
+            padding: 0;
+            background: url("background.avif");
         }
 
         button {
@@ -36,12 +39,15 @@
         button:hover {
             transform: scale(1.2);
             border-radius: 1rem;
-            background-color: rgb(212, 27, 27);
+        }
+
+        .background:hover:has(button:hover) {
+
         }
     </style>
 </head>
 
-<body>
+<body class="background">
     <script>
         function showNotification() {
             Notification.requestPermission(function (permission) {

@@ -81,7 +81,7 @@
         }
     </script>
     <img src="https://images.unsplash.com/photo-1561570541-aaba21a3ecf0" alt="demo" />
-    <button onclick='showNotification()'>Hello!!</button>
+    <button onclick='showNotification()'>Hello</button>
 </body>
 
 </html>

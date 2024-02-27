@@ -37,6 +37,8 @@ objects:
       params:
       - name: url
         value: $(params.git-url)
+      - name: revision
+        value: refs/heads/main
 
     - name: step-1
       runAfter:
@@ -97,7 +99,7 @@ objects:
   spec:
     params:
     - name: git-url
-      value: $(body.repository.url)
+      value: $(body.repository.clone_url)
 
 - apiVersion: triggers.tekton.dev/v1beta1
   kind: TriggerTemplate

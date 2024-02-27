@@ -1,85 +1,69 @@
-apiVersion: template.openshift.io/v1
-kind: Template
-metadata:
-  name: pipeline-example
-parameters:
-- name: NAMESPACE
-  value: namespace
-- name: WEBHOOK_BRANCH
-  value: main
-- name: WEBHOOK_SECRET
-  value: QUADSolutions
-- name: APP_NAME
-  value: s2i
-
-labels:
-  template: ${APP_NAME}
-
-objects:
+apiVersion: v1
+items:
 - apiVersion: tekton.dev/v1beta1
   kind: Pipeline
   metadata:
-    name: ${APP_NAME}
+    labels:
+      template: s2i
+    name: s2i
   spec:
-    params:
-    - name: git-url
-      type: string
-    workspaces:
-    - name: code-clone
-
-    tasks:
-    - name: step-0
-      taskRef:
-        name: git-clone
-      workspaces:
-      - name: output
-        workspace: code-clone
-      params:
-      - name: url
-        value: $(params.git-url)
-
-    - name: step-1
-      runAfter:
-      - step-0
-      workspaces:
-      - name: source
-        workspace: code-clone
-      taskSpec:
-        steps:
-        - name: test
-          image: image-registry.openshift-image-registry.svc:5000/openshift/cli
-          script: |
-            #!/usr/bin/env bash
-            echo "---- Print index.php  ----"
-            cat /workspace/source/index.php
-            echo "--------------------------"
-
-        - name: build
-          image: image-registry.openshift-image-registry.svc:5000/openshift/cli
-          script: |
-            #!/usr/bin/env bash
-            echo "---- Trigger Build ----"
-            oc start-build bc/${APP_NAME}
-            echo "-----------------------"
-
-    finally: 
+    finally:
     - name: step-final
       taskSpec:
         steps:
         - image: image-registry.openshift-image-registry.svc:5000/openshift/cli
           script: |
             #!/usr/bin/env bash
-            
-            echo "Everything Finished"
 
+            echo "Everything Finished"
+    params:
+    - name: git-url
+      type: string
+    tasks:
+    - name: step-0
+      params:
+      - name: url
+        value: $(params.git-url)
+      taskRef:
+        name: git-clone
+      workspaces:
+      - name: output
+        workspace: code-clone
+    - name: step-1
+      runAfter:
+      - step-0
+      taskSpec:
+        steps:
+        - image: image-registry.openshift-image-registry.svc:5000/openshift/cli
+          name: test
+          script: |
+            #!/usr/bin/env bash
+            echo "---- Print index.php  ----"
+            cat /workspace/source/index.php
+            echo "--------------------------"
+        - image: image-registry.openshift-image-registry.svc:5000/openshift/cli
+          name: build
+          script: |
+            #!/usr/bin/env bash
+            echo "---- Trigger Build ----"
+            oc start-build bc/s2i
+            echo "-----------------------"
+      workspaces:
+      - name: source
+        workspace: code-clone
+    workspaces:
+    - name: code-clone
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
-    name: build-bot 
-
+    labels:
+      template: s2i
+    name: build-bot
 - apiVersion: rbac.authorization.k8s.io/v1
   kind: RoleBinding
   metadata:
+    labels:
+      template: s2i
     name: rolebinding-build-bot
   roleRef:
     apiGroup: rbac.authorization.k8s.io
@@ -88,21 +72,23 @@ objects:
   subjects:
   - kind: ServiceAccount
     name: build-bot
-    namespace: ${NAMESPACE}
-
+    namespace: meijerflorent-dev
 - apiVersion: triggers.tekton.dev/v1beta1
   kind: TriggerBinding
   metadata:
-    name: ${APP_NAME}-trigger-binding
+    labels:
+      template: s2i
+    name: s2i-trigger-binding
   spec:
     params:
     - name: git-url
       value: $(body.repository.clone_url)
-
 - apiVersion: triggers.tekton.dev/v1beta1
   kind: TriggerTemplate
   metadata:
-    name: ${APP_NAME}-trigger-template
+    labels:
+      template: s2i
+    name: s2i-trigger-template
   spec:
     params:
     - name: git-url
@@ -112,13 +98,16 @@ objects:
       metadata:
         generateName: pipeline-run-
       spec:
-        serviceAccountName: build-bot
+        params:
+        - name: git-url
+          value: $(tt.params.git-url)
         pipelineRef:
-          name: ${APP_NAME}
+          name: s2i
         podTemplate:
           securityContext:
             fsGroup: 65532
             runAsUser: 1001
+        serviceAccountName: build-bot
         workspaces:
         - name: code-clone
           volumeClaimTemplate:
@@ -128,54 +117,54 @@ objects:
               resources:
                 requests:
                   storage: 1Gi
-        params:
-        - name: git-url
-          value: $(tt.params.git-url)
-      
 - apiVersion: triggers.tekton.dev/v1beta1
   kind: Trigger
   metadata:
-    name: ${APP_NAME}-trigger
+    labels:
+      template: s2i
+    name: s2i-trigger
   spec:
-    serviceAccountName: pipeline
-    interceptors:
-      - ref:
-          name: "github"
-        params:
-          - name: "secretRef"
-            value:
-              secretName: github-secret-webhook
-              secretKey: secretToken
-          - name: "eventTypes"
-            value: ["push"]
     bindings:
-      - ref: ${APP_NAME}-trigger-binding
+    - ref: s2i-trigger-binding
+    interceptors:
+    - params:
+      - name: secretRef
+        value:
+          secretKey: secretToken
+          secretName: github-secret-webhook
+      - name: eventTypes
+        value:
+        - push
+      ref:
+        name: github
+    serviceAccountName: pipeline
     template:
-      ref: ${APP_NAME}-trigger-template
-
+      ref: s2i-trigger-template
 - apiVersion: triggers.tekton.dev/v1beta1
   kind: EventListener
   metadata:
-    name: ${APP_NAME}-eventlistener
+    labels:
+      template: s2i
+    name: s2i-eventlistener
   spec:
     serviceAccountName: pipeline
     triggers:
-      - triggerRef: ${APP_NAME}-trigger
-      
+    - triggerRef: s2i-trigger
 - apiVersion: v1
   kind: Secret
   metadata:
+    labels:
+      template: s2i
     name: github-secret-webhook
-  type: Opaque
   stringData:
-    secretToken: ${WEBHOOK_SECRET}
-
+    secretToken: QUADSolutions
+  type: Opaque
 - apiVersion: route.openshift.io/v1
   kind: Route
   metadata:
     labels:
-      template: pipeline-${APP_NAME}
-    name: el-${APP_NAME}-eventlistener-route
+      template: s2i
+    name: el-s2i-eventlistener-route
   spec:
     port:
       targetPort: http-listener
@@ -184,6 +173,8 @@ objects:
       termination: edge
     to:
       kind: Service
-      name: el-${APP_NAME}-eventlistener
+      name: el-s2i-eventlistener
       weight: 100
     wildcardPolicy: None
+kind: List
+metadata: {}

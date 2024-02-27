@@ -5,31 +5,53 @@
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
     <style>
         body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            min-height: 100dvh;
+            display: grid;
+            grid-template-rows: 1fr;
+            grid-template-columns: 1fr;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
             margin: 0;
             padding: 0;
-            background: url("background.avif");
+        }
+
+        body:hover:has(button:hover)>img {
+            opacity: 1;
+        }
+
+        img {
+            grid-column: 1 / -1;
+            grid-row: 1 / -1;
+            align-self: center;
+            justify-self: center;
+            transition: 0.3s all;
+            opacity: 0;
+            transition: 1s all;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
         }
 
         button {
+            grid-column: 1 / -1;
+            grid-row: 1 / -1;
+            align-self: center;
+            justify-self: center;
+            z-index: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgb(239, 239, 239);
-            background-color: rgb(2, 2, 2);
+            color: rgb(38, 38, 38);
+            background-color: rgba(0, 0, 0, 0);
             border: none;
-            min-width: min(16rem, 80%);
             max-width: 100%;
             aspect-ratio: 1/1;
 
-            font-size: 3rem;
+            font-size: 1.5rem;
             font-family: monospace;
 
-            padding: 2rem;
+            padding: 1rem;
             border-radius: 100%;
             transition: 0.3s all;
 
@@ -37,17 +59,12 @@
         }
 
         button:hover {
-            transform: scale(1.2);
-            border-radius: 1rem;
-        }
-
-        .background:hover:has(button:hover) {
-
+            backdrop-filter: blur(10px);
         }
     </style>
 </head>
 
-<body class="background">
+<body>
     <script>
         function showNotification() {
             Notification.requestPermission(function (permission) {
@@ -63,7 +80,8 @@
             });
         }
     </script>
-    <button onclick='showNotification()'>Click</button>
+    <img src="https://images.unsplash.com/photo-1561570541-aaba21a3ecf0" alt="demo" />
+    <button onclick='showNotification()'>Hello!</button>
 </body>
 
 </html>

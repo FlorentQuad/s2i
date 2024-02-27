@@ -31,7 +31,7 @@ items:
         workspace: code-clone
     - name: step-1
       runAfter:
-      - fetch-repo
+      - step-0
       taskSpec:
         steps:
         - image: image-registry.openshift-image-registry.svc:5000/openshift/cli

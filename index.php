@@ -57,7 +57,7 @@
             });
         }
     </script>
-    <button onclick='showNotification()'>Click!</button>
+    <button onclick='showNotification()'>Click</button>
 </body>
 
 </html>

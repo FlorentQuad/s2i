@@ -1,0 +1,185 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: pipeline-example
+parameters:
+- name: NAMESPACE
+  value: namespace
+- name: WEBHOOK_BRANCH
+  value: main
+- name: WEBHOOK_SECRET
+  value: QUADSolutions
+- name: APP_NAME
+  value: s2i
+
+labels:
+  template: ${APP_NAME}
+
+objects:
+- apiVersion: tekton.dev/v1beta1
+  kind: Pipeline
+  metadata:
+    name: ${APP_NAME}
+  spec:
+    params:
+    - name: git-url
+      type: string
+    workspaces:
+    - name: code-clone
+
+    tasks:
+    - name: step-0
+      taskRef:
+        name: git-clone
+      workspaces:
+      - name: output
+        workspace: code-clone
+      params:
+      - name: url
+        value: $(params.git-url)
+
+    - name: step-1
+      runAfter:
+      - fetch-repo
+      workspaces:
+      - name: source
+        workspace: code-clone
+      taskSpec:
+        steps:
+        - name: test
+          image: image-registry.openshift-image-registry.svc:5000/openshift/cli
+          script: |
+            #!/usr/bin/env bash
+            echo "---- Print index.php  ----"
+            cat /workspace/source/index.php
+            echo "--------------------------"
+
+        - name: build
+          image: image-registry.openshift-image-registry.svc:5000/openshift/cli
+          script: |
+            #!/usr/bin/env bash
+            echo "---- Trigger Build ----"
+            oc start-build bc/${APP_NAME}
+            echo "-----------------------"
+
+    finally: 
+    - name: step-final
+      taskSpec:
+        steps:
+        - image: image-registry.openshift-image-registry.svc:5000/openshift/cli
+          script: |
+            #!/usr/bin/env bash
+            
+            echo "Everything Finished"
+
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: build-bot 
+
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    name: rolebinding-build-bot
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: edit
+  subjects:
+  - kind: ServiceAccount
+    name: build-bot
+    namespace: ${NAMESPACE}
+
+- apiVersion: triggers.tekton.dev/v1beta1
+  kind: TriggerBinding
+  metadata:
+    name: ${APP_NAME}-trigger-binding
+  spec:
+    params:
+    - name: git-url
+      value: $(body.repository.url)
+
+- apiVersion: triggers.tekton.dev/v1beta1
+  kind: TriggerTemplate
+  metadata:
+    name: ${APP_NAME}-trigger-template
+  spec:
+    params:
+    - name: git-url
+    resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: pipeline-run-
+      spec:
+        serviceAccountName: build-bot
+        pipelineRef:
+          name: ${APP_NAME}
+        workspaces:
+        - name: code-clone
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+              - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 1Gi
+        params:
+        - name: git-url
+          value: $(tt.params.git-url)
+      
+- apiVersion: triggers.tekton.dev/v1beta1
+  kind: Trigger
+  metadata:
+    name: ${APP_NAME}-trigger
+  spec:
+    serviceAccountName: pipeline
+    interceptors:
+      - ref:
+          name: "github"
+        params:
+          - name: "secretRef"
+            value:
+              secretName: github-secret-webhook
+              secretKey: secretToken
+          - name: "eventTypes"
+            value: ["push"]
+    bindings:
+      - ref: ${APP_NAME}-trigger-binding
+    template:
+      ref: ${APP_NAME}-trigger-template
+
+- apiVersion: triggers.tekton.dev/v1beta1
+  kind: EventListener
+  metadata:
+    name: ${APP_NAME}-eventlistener
+  spec:
+    serviceAccountName: pipeline
+    triggers:
+      - triggerRef: ${APP_NAME}-trigger
+      
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: github-secret-webhook
+  type: Opaque
+  stringData:
+    secretToken: ${WEBHOOK_SECRET}
+
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    labels:
+      template: pipeline-${APP_NAME}
+    name: el-${APP_NAME}-eventlistener-route
+  spec:
+    port:
+      targetPort: http-listener
+    tls:
+      insecureEdgeTerminationPolicy: None
+      termination: edge
+    to:
+      kind: Service
+      name: el-${APP_NAME}-eventlistener
+      weight: 100
+    wildcardPolicy: None

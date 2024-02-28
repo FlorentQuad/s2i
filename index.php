@@ -13,10 +13,12 @@
             height: 100dvh;
             margin: 0;
             padding: 0;
+            background-color: rgb(0, 0, 0);
         }
 
         body:hover:has(button:hover)>img {
             opacity: 1;
+            transition: 1s all;
         }
 
         body>div {
@@ -29,10 +31,10 @@
             justify-content: center;
             width: 100%;
             height: 100%;
-            background-color: rgb(0, 0, 0);
             opacity: 0;
             z-index: -1;
             transition: 0.5s 3s all;
+            background-color: rgb(0, 0, 0);
         }
 
         body>div>svg {
@@ -98,9 +100,8 @@
             grid-row: 1 / -1;
             align-self: center;
             justify-self: center;
-            transition: 0.3s all;
             opacity: 0;
-            transition: 1s all;
+            transition: 0.5s all;
             object-fit: cover;
             width: 100%;
             height: 100%;
@@ -116,10 +117,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgb(38, 38, 38);
-            background-color: rgba(0, 0, 0, 0);
-            border: 1px solid rgb(222, 222, 222);
-            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            color: rgb(17, 17, 17);
+            background-color: rgb(255, 255, 255);
+            border: none;
             max-width: 100%;
             aspect-ratio: 1/1;
 
@@ -135,7 +135,9 @@
 
         button:hover {
             backdrop-filter: blur(10px);
-            border: none;
+            background-color: rgba(255, 255, 255, 0);
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            transform: scale(1.4);
         }
     </style>
 </head>
@@ -164,8 +166,7 @@
             <g>
                 <path fill="#FFF" d="M 0 0 V 24.547 H 15.678 L 15.479 20.459 L 16.871 24.547 H 30.385 L 22.51 0 " />
                 <path fill="#FFF" d="M 0 71.094 H 17.139 V 54.492 L 16.752 46.547 H 0 Z" />
-                <path fill="#FFF"
-                    d="M 32.715 71.094 H 44.043 L 52.383 46.547 H 39.312 L 38.379 49.463 L 37.443 46.547 H 24.359 Z" />
+                <path fill="#FFF" d="M 32.715 71.094 H 44.043 L 52.383 46.547 H 39.312 L 38.379 49.463 L 37.443 46.547 H 24.359 Z" />
                 <path fill="#FFF" d="M 54.199 0 H 76.758 V 24.547 H 61.033 L 61.23 20.508 L 59.858 24.547 H 46.348 Z" />
                 <path fill="#FFF" d="M 59.57 71.094 H 76.758 V 46.547 H 59.958 L 59.57 54.492 Z" />
                 <path fill="#FFF" d="M 87.646 0 H 136.719 V 13.238 H 104.785 V 24.547 H 87.646 Z" />
@@ -173,8 +174,7 @@
                 <path fill="#FFF" d="M 144.775 0 H 161.865 V 24.547 H 144.775 Z" />
                 <path fill="#FFF" d="M 144.775 71.095 H 161.865 V 46.547 H 144.775 Z" />
                 <path fill="#FFF" d="M 202.1 0 H 219.189 V 24.547 H 202.1 Z" />
-                <path fill="#FFF"
-                    d="M 202.1 48.78 L 202.1 46.547 L 219.189 46.547 L 219.189 48.78 Q 219.189 55.567 216.04 60.889 Q 212.891 66.212 207.251 69.141 Q 201.611 72.071 194.678 72.071 A 37.191 37.191 0 0 1 187.609 71.44 Q 180.942 70.148 176.611 66.212 A 19.044 19.044 0 0 1 170.86 56.134 A 28.922 28.922 0 0 1 170.166 49.61 L 187.354 49.61 A 22.459 22.459 0 0 0 187.479 52.08 Q 187.814 55.094 189.038 56.69 Q 190.451 58.533 193.462 58.83 A 12.394 12.394 0 0 0 194.678 58.887 A 7.597 7.597 0 0 0 197.11 58.517 A 6.13 6.13 0 0 0 200.171 56.226 Q 201.684 54.138 202.01 50.742 A 20.564 20.564 0 0 0 202.1 48.78 Z" />
+                <path fill="#FFF" d="M 202.1 48.78 L 202.1 46.547 L 219.189 46.547 L 219.189 48.78 Q 219.189 55.567 216.04 60.889 Q 212.891 66.212 207.251 69.141 Q 201.611 72.071 194.678 72.071 A 37.191 37.191 0 0 1 187.609 71.44 Q 180.942 70.148 176.611 66.212 A 19.044 19.044 0 0 1 170.86 56.134 A 28.922 28.922 0 0 1 170.166 49.61 L 187.354 49.61 A 22.459 22.459 0 0 0 187.479 52.08 Q 187.814 55.094 189.038 56.69 Q 190.451 58.533 193.462 58.83 A 12.394 12.394 0 0 0 194.678 58.887 A 7.597 7.597 0 0 0 197.11 58.517 A 6.13 6.13 0 0 0 200.171 56.226 Q 201.684 54.138 202.01 50.742 A 20.564 20.564 0 0 0 202.1 48.78 Z" />
                 <path fill="#FFF" d="M 229.98 0 H 279.053 V 13.238 H 247.119 V 24.547 H 229.98 Z" />
                 <path fill="#FFF" d="M 229.98 71.095 H 279.053 V 57.911 H 247.119 V 46.547 H 229.98 Z" />
                 <path fill="#FFF" d="M 285.939 71.096 H 303.076 V 46.547 H 285.939 Z" />

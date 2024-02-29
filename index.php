@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Demo Pipeline</title>
+    <title>MEIJER</title>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
     <style>
         body {
@@ -38,8 +38,8 @@
         }
 
         body>div>svg {
-            width: 80%;
-            height: 80%;
+            width: 50%;
+            height: 50%;
             transition: width 0.5s, height 0.5s;
         }
 
@@ -159,7 +159,7 @@
         }
 
         setTimeout(() => document.body.classList.remove("meijerFolded"), 2000);
-        setTimeout(() => document.body.classList.remove("meijerVisible"), 3000)
+        setTimeout(() => document.body.classList.remove("meijerVisible"), 3000);
     </script>
     <div>
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 343.259 72.067">

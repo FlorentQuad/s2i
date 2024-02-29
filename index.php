@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>MEIJER</title>
+    <title>QUAD</title>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
     <style>
         body {
@@ -47,52 +47,34 @@
             transition: transform 0.8s cubic-bezier(.81, .28, .19, .75), opacity 0.4s ease-in-out;
         }
 
-        .meijerVisible>div {
+        .quadVisible>div {
             opacity: 1;
             z-index: 2;
         }
 
-        .meijerVisible>div>svg {
+        .quadVisible>div>svg {
             width: 20%;
             height: 20%;
         }
 
-        .meijerFolded>div>svg:nth-of-type(1) path:nth-of-type(1),
-        .meijerFolded>div>svg:nth-of-type(1) path:nth-of-type(2),
-        .meijerFolded>div>svg:nth-of-type(1) path:nth-of-type(3),
-        .meijerFolded>div>svg:nth-of-type(1) path:nth-of-type(4),
-        .meijerFolded>div>svg:nth-of-type(1) path:nth-of-type(5) {
-            transform: translateX(30%);
-        }
-
-        .meijerFolded>div>svg:nth-of-type(1) path:nth-of-type(6),
-        .meijerFolded>div>svg:nth-of-type(1) path:nth-of-type(7) {
+        .quadFolded>div>svg:nth-of-type(1) path:nth-of-type(1) {
             opacity: 0;
             transform: translateX(20%);
         }
 
-        .meijerFolded>div>svg:nth-of-type(1) path:nth-of-type(8),
-        .meijerFolded>div>svg:nth-of-type(1) path:nth-of-type(9) {
+        .quadFolded>div>svg:nth-of-type(1) path:nth-of-type(2) {
             opacity: 0;
             transform: translateX(10%);
         }
 
-        .meijerFolded>div>svg:nth-of-type(1) path:nth-of-type(10),
-        .meijerFolded>div>svg:nth-of-type(1) path:nth-of-type(11) {
-            opacity: 0;
-            transform: translateX(-10%);
-        }
-
-        .meijerFolded>div>svg:nth-of-type(1) path:nth-of-type(12),
-        .meijerFolded>div>svg:nth-of-type(1) path:nth-of-type(13) {
+        .quadFolded>div>svg:nth-of-type(1) path:nth-of-type(4) {
             opacity: 0;
             transform: translateX(-20%);
         }
 
-        .meijerFolded>div>svg:nth-of-type(1) path:nth-of-type(14),
-        .meijerFolded>div>svg:nth-of-type(1) path:nth-of-type(15),
-        .meijerFolded>div>svg:nth-of-type(1) path:nth-of-type(16) {
-            transform: translateX(-30%);
+        .quadFolded>div>svg:nth-of-type(1) path:nth-of-type(3) {
+            opacity: 0;
+            transform: translateX(-10%);
         }
 
         img {
@@ -117,16 +99,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgb(17, 17, 17);
             background-color: rgb(255, 255, 255);
             border: none;
             max-width: 100%;
             aspect-ratio: 1/1;
 
-            font-size: 1.5rem;
-            font-family: monospace;
-
-            padding: 1rem;
+            padding: 2rem;
             border-radius: 100%;
             transition: 0.3s all;
 
@@ -139,15 +117,20 @@
             box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
             transform: scale(1.4);
         }
+
+        button>svg{
+            width: 2rem;
+            height: 2rem;
+        }
     </style>
 </head>
 
-<body class="meijerFolded meijerVisible">
+<body class="quadFolded quadVisible">
     <script>
         function showNotification() {
             Notification.requestPermission(function (permission) {
                 if (permission === "granted") {
-                    var title = "Hello World!";
+                    var title = "QUAD!";
                     var body = "Hope you are having a great day.";
                     var notification = new Notification(title, { body });
                     notification.onclick = () => {
@@ -158,34 +141,27 @@
             });
         }
 
-        setTimeout(() => document.body.classList.remove("meijerFolded"), 2000);
-        setTimeout(() => document.body.classList.remove("meijerVisible"), 3000);
+        setTimeout(() => document.body.classList.remove("quadFolded"), 2000);
+        setTimeout(() => document.body.classList.remove("quadVisible"), 3000);
     </script>
     <div>
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 343.259 72.067">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 1 134.1 29.27">
             <g>
-                <path fill="#FFF" d="M 0 0 V 24.547 H 15.678 L 15.479 20.459 L 16.871 24.547 H 30.385 L 22.51 0 " />
-                <path fill="#FFF" d="M 0 71.094 H 17.139 V 54.492 L 16.752 46.547 H 0 Z" />
-                <path fill="#FFF" d="M 32.715 71.094 H 44.043 L 52.383 46.547 H 39.312 L 38.379 49.463 L 37.443 46.547 H 24.359 Z" />
-                <path fill="#FFF" d="M 54.199 0 H 76.758 V 24.547 H 61.033 L 61.23 20.508 L 59.858 24.547 H 46.348 Z" />
-                <path fill="#FFF" d="M 59.57 71.094 H 76.758 V 46.547 H 59.958 L 59.57 54.492 Z" />
-                <path fill="#FFF" d="M 87.646 0 H 136.719 V 13.238 H 104.785 V 24.547 H 87.646 Z" />
-                <path fill="#FFF" d="M 87.646 71.095 H 136.621 V 57.911 H 104.785 V 46.547 H 87.646 Z" />
-                <path fill="#FFF" d="M 144.775 0 H 161.865 V 24.547 H 144.775 Z" />
-                <path fill="#FFF" d="M 144.775 71.095 H 161.865 V 46.547 H 144.775 Z" />
-                <path fill="#FFF" d="M 202.1 0 H 219.189 V 24.547 H 202.1 Z" />
-                <path fill="#FFF" d="M 202.1 48.78 L 202.1 46.547 L 219.189 46.547 L 219.189 48.78 Q 219.189 55.567 216.04 60.889 Q 212.891 66.212 207.251 69.141 Q 201.611 72.071 194.678 72.071 A 37.191 37.191 0 0 1 187.609 71.44 Q 180.942 70.148 176.611 66.212 A 19.044 19.044 0 0 1 170.86 56.134 A 28.922 28.922 0 0 1 170.166 49.61 L 187.354 49.61 A 22.459 22.459 0 0 0 187.479 52.08 Q 187.814 55.094 189.038 56.69 Q 190.451 58.533 193.462 58.83 A 12.394 12.394 0 0 0 194.678 58.887 A 7.597 7.597 0 0 0 197.11 58.517 A 6.13 6.13 0 0 0 200.171 56.226 Q 201.684 54.138 202.01 50.742 A 20.564 20.564 0 0 0 202.1 48.78 Z" />
-                <path fill="#FFF" d="M 229.98 0 H 279.053 V 13.238 H 247.119 V 24.547 H 229.98 Z" />
-                <path fill="#FFF" d="M 229.98 71.095 H 279.053 V 57.911 H 247.119 V 46.547 H 229.98 Z" />
-                <path fill="#FFF" d="M 285.939 71.096 H 303.076 V 46.547 H 285.939 Z" />
-                <path fill="#FFF" d="M 324.902 71.095 H 343.262 V 70.362 L 330.928 46.547 H 312.629 Z" />
-                <path fill="#FFF"
-                    d="M 285.939 24.547 L 285.938 0.001 L 313.916 0.001 A 46.032 46.032 0 0 1 321.621 0.605 Q 328.902 1.843 333.691 5.616 A 18.281 18.281 0 0 1 340.646 18.394 A 26.62 26.62 0 0 1 340.82 21.485 V 24.547 Z" />
+                <path fill="#FFF" d="M 27.27 23.34 V 5.92 C 27.27 4.56 26.78 3.4 25.81 2.44 S 23.67 1 22.31 1 H 4.92 C 3.56 1 2.4 1.48 1.44 2.44 S 0 4.56 0 5.92 V 23.34 C 0 24.7 0.48 25.86 1.44 26.82 S 3.56 28.26 4.92 28.26 H 22.34 C 22.98 28.26 23.57 28.15 24.12 27.94 L 26.45 30.27 L 29.37 27.35 L 27 24.98 C 27.17 24.47 27.27 23.93 27.27 23.34 Z M 5.49 24.18 C 4.93 24.18 4.56 24.09 4.37 23.9 C 4.18 23.71 4.09 23.34 4.09 22.78 V 6.49 C 4.09 5.93 4.18 5.56 4.37 5.37 C 4.56 5.18 4.93 5.09 5.49 5.09 H 21.74 C 22.32 5.09 22.7 5.18 22.88 5.37 C 23.06 5.56 23.15 5.93 23.15 6.49 V 21.12 L 20.17 18.14 L 17.25 21.06 L 20.37 24.18 H 5.49 Z"/>
+                <path fill="#FFF" d="M 60.02 22.78 C 60.02 23.34 59.93 23.71 59.75 23.9 C 59.57 24.09 59.19 24.18 58.61 24.18 H 42.38 C 41.82 24.18 41.45 24.09 41.26 23.9 C 41.07 23.71 40.98 23.34 40.98 22.78 V 1 H 36.89 V 23.34 C 36.89 24.7 37.37 25.86 38.33 26.82 S 40.45 28.26 41.81 28.26 H 59.23 C 60.57 28.26 61.72 27.78 62.7 26.82 C 63.67 25.86 64.16 24.7 64.16 23.34 V 1 H 60.03 V 22.78 H 60.02 Z"/> 
+                <path fill="#FFF" d="M 94.11 1 H 76.72 C 75.36 1 74.19 1.48 73.24 2.44 C 72.28 3.4 71.8 4.56 71.8 5.92 V 28.26 H 75.89 V 18.72 H 94.94 V 28.26 H 99.07 V 5.92 C 99.07 4.56 98.58 3.4 97.61 2.44 S 95.47 1 94.11 1 Z M 94.94 14.63 H 75.89 V 6.49 C 75.89 5.93 75.98 5.56 76.17 5.37 C 76.36 5.18 76.73 5.09 77.29 5.09 H 93.54 C 94.12 5.09 94.5 5.18 94.68 5.37 C 94.86 5.56 94.95 5.93 94.95 6.49 V 14.63 H 94.94 Z"/>
+                <path fill="#FFF" d="M 132.68 2.44 C 131.7 1.48 130.54 1 129.17 1 H 106.86 V 28.27 H 129.17 C 130.53 28.27 131.7 27.79 132.67 26.83 C 133.64 25.87 134.13 24.71 134.13 23.35 V 5.92 C 134.13 4.56 133.65 3.4 132.68 2.44 Z M 130.01 22.78 C 130.01 23.34 129.92 23.71 129.74 23.9 C 129.56 24.09 129.18 24.18 128.6 24.18 H 112.35 C 111.79 24.18 111.42 24.09 111.23 23.9 C 111.04 23.71 110.95 23.34 110.95 22.78 V 6.49 C 110.95 5.93 111.04 5.56 111.23 5.37 C 111.42 5.18 111.79 5.09 112.35 5.09 H 128.6 C 129.18 5.09 129.56 5.18 129.74 5.37 C 129.92 5.56 130.01 5.93 130.01 6.49 V 22.78 Z"/>
             </g>
         </svg>
     </div>
-    <img src="https://images.unsplash.com/photo-1561570541-aaba21a3ecf0" alt="demo" />
-    <button onclick='showNotification()'>Hi!</button>
+    <img src="https://images.unsplash.com/photo-1585577028863-35a3349c60db" alt="demo" />
+    <button onclick='showNotification()'>
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 1 29.37 29.27">
+            <g>
+                <path fill="#000" d="M 27.27 23.34 V 5.92 C 27.27 4.56 26.78 3.4 25.81 2.44 S 23.67 1 22.31 1 H 4.92 C 3.56 1 2.4 1.48 1.44 2.44 S 0 4.56 0 5.92 V 23.34 C 0 24.7 0.48 25.86 1.44 26.82 S 3.56 28.26 4.92 28.26 H 22.34 C 22.98 28.26 23.57 28.15 24.12 27.94 L 26.45 30.27 L 29.37 27.35 L 27 24.98 C 27.17 24.47 27.27 23.93 27.27 23.34 Z M 5.49 24.18 C 4.93 24.18 4.56 24.09 4.37 23.9 C 4.18 23.71 4.09 23.34 4.09 22.78 V 6.49 C 4.09 5.93 4.18 5.56 4.37 5.37 C 4.56 5.18 4.93 5.09 5.49 5.09 H 21.74 C 22.32 5.09 22.7 5.18 22.88 5.37 C 23.06 5.56 23.15 5.93 23.15 6.49 V 21.12 L 20.17 18.14 L 17.25 21.06 L 20.37 24.18 H 5.49 Z"/>
+            </g>
+        </svg>
+    </button>
 </body>
 
 </html>
